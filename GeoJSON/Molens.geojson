@@ -1,6 +1,6 @@
-{
+var molens = {
 "type": "FeatureCollection",
-"name": "Molens",
+"name": "molens",
 "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::28992" } },
 "features": [
 { "type": "Feature", "properties": { "gid": 1, "NAAM": "De Trouwe Waghter of Trouwe Wachter", "PLAATS": "Tienhoven", "CATEGORIE": "windmolen", "FUNCTIE": "poldermolen", "TYPE": "wipmolen", "STAAT": "bestaand", "RMONNUMMER": "26483", "TBGCNUMMER": "00003", "INFOLINK": "https://zoeken.allemolens.nl/tenbruggencatenummer/00003", "THUMBNAIL": "https://images.memorix.nl/rce/thumb/350x350/9165dd5b-34b8-705d-0128-3196d2831677.jpg", "HFDFUNCTIE": "poldermolen", "FOTOGRAAF": "Henk Baas (beeldbank RCE)", "FOTO_GROOT": "https://images.memorix.nl/rce/thumb/fullsize/6e74f114-3fc0-8904-6896-b44a616a2b03.jpg", "BOUWJAAR": "1832" }, "geometry": { "type": "Point", "coordinates": [ 134826.000000186118996, 464910.999998081242666 ] } },

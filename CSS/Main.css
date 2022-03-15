@@ -1,0 +1,28 @@
+/* Base styling */
+*, *::before, *::after{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html{
+    font-size: 62.5%;
+    font-family: 'Monda', sans-serif;
+    overflow: hidden;
+}
+
+body{
+    background-color: aqua;
+    min-height: 100vh;
+    min-width: 100vh;
+    display: block;
+}
+main{
+    height: 100%;
+    width: 100%;
+}
+
+#map { 
+    position: absolute;
+    height: 100%;
+    width: 100%;
+ }
