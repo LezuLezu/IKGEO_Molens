@@ -12,61 +12,90 @@ scale = L.control.scale().addTo(map);
 
 var north = L.control({position: "bottomright"});
 north.onAdd = function() {
-  var div = L.DomUtil.create("div", "info legend");
-  div.innerHTML = '<img src="IMG/windroos.png" width="50" height="50" alt="north arrow">';
+  var div = L.DomUtil.create("div", "windroos");
+  div.innerHTML = '<img src="IMG/windroos.png" width="75" height="75" alt="north arrow">';
   return div;
 }
 north.addTo(map);
-
-// function getMap(data){
-//     var windmolens = L.geoJson(data, {
-//         style: style,
-//         onEachFeature: onEachFeature
-//       });
-  
-//     return windmolens;
-//   }
-  
-//   molens = getMap(molens);
-  // molens.addTo(map);
-
-
   
 function getColor(typeMolen){
-    return  typeMolen == "industriemolen" ? "#30123b" :
-            typeMolen == "koren-/industriemolen" ? "#466be3" :
-            typeMolen == "koren-/zaagmolen" ? "#28bceb" :
-            typeMolen == "korenmolen" ? "#32f298" :
-            typeMolen == "papiermolen" ? "#eecf3a" :
-            typeMolen == "poldermolen" ? "#fb7e21" :
-            typeMolen == "zaagmolen" ? "#d02f05" :
-            typeMolen == "onbekend" ? "#a4fc3c" :
-                                        "#a4fc3c";
+    return  typeMolen == "industriemolen" ? windmillIcon_Purple :
+            typeMolen == "koren-/industriemolen" ? windmillIcon_Pink :
+            typeMolen == "koren-/zaagmolen" ? windmillIcon_Orange :
+            typeMolen == "korenmolen" ? windmillIcon_Red :
+            typeMolen == "papiermolen" ? windmillIcon_Cyan :
+            typeMolen == "poldermolen" ? windmillIcon_Blue :
+            typeMolen == "zaagmolen" ? windmillIcon_Green :
+            typeMolen == "onbekend" ? windmillIcon_Brown :
+                                        windmillIcon_Brown;
 }
-
-var style ={
-  // "color": getColor(molens.features.properties.HFDFUNCTIE),
-  radius: 8,
-  fillColor: "#ff7800",
-  color: "#000",
-  weight: 1,
-  opacity: 1,
-  fillOpacity: 0.8
-}
-
-L.geoJSON(molens, {
-  pointToLayer: function (feature, latlng) {
-      return L.circleMarker(latlng, style);
-  }
-}).addTo(map);
 
 console.log(molens);
 
-
-
+// Windmill icons
 var windmillIcon = new L.Icon({  
-    iconSize: [25,25],
-    iconAnchor: [13, 27],
-    popupAnchor: [1, -24],
-    iconUrl: "IMG/windmill.png"
+  iconSize: [25,25],
+  iconAnchor: [13, 27],
+  popupAnchor: [1, -24],
+  iconUrl: "IMG/windmill.png"
 });
+var windmillIcon_Blue = new L.Icon({  
+  iconSize: [25,25],
+  iconAnchor: [13, 27],
+  popupAnchor: [1, -24],
+  iconUrl: "IMG/windmill_blue.png"
+});
+var windmillIcon_Brown = new L.Icon({  
+  iconSize: [25,25],
+  iconAnchor: [13, 27],
+  popupAnchor: [1, -24],
+  iconUrl: "IMG/windmill_brown.png"
+});
+var windmillIcon_Cyan = new L.Icon({  
+  iconSize: [25,25],
+  iconAnchor: [13, 27],
+  popupAnchor: [1, -24],
+  iconUrl: "IMG/windmill_cyan.png"
+});
+var windmillIcon_Green = new L.Icon({  
+  iconSize: [25,25],
+  iconAnchor: [13, 27],
+  popupAnchor: [1, -24],
+  iconUrl: "IMG/windmill_green.png"
+});
+var windmillIcon_Orange = new L.Icon({  
+  iconSize: [25,25],
+  iconAnchor: [13, 27],
+  popupAnchor: [1, -24],
+  iconUrl: "IMG/windmill_orange.png"
+});
+var windmillIcon_Pink = new L.Icon({  
+  iconSize: [25,25],
+  iconAnchor: [13, 27],
+  popupAnchor: [1, -24],
+  iconUrl: "IMG/windmill_pink.png"
+});
+var windmillIcon_Purple = new L.Icon({  
+  iconSize: [25,25],
+  iconAnchor: [13, 27],
+  popupAnchor: [1, -24],
+  iconUrl: "IMG/windmill_purple.png"
+});
+var windmillIcon_Red = new L.Icon({  
+  iconSize: [25,25],
+  iconAnchor: [13, 27],
+  popupAnchor: [1, -24],
+  iconUrl: "IMG/windmill_red.png"
+});
+
+
+var molenLayer = L.geoJSON(molens, {
+  pointToLayer: function(feature, latlng){
+    return L.marker(latlng, {icon: getColor(feature.properties.HFDFUNCTIE)});
+  }
+}).addTo(map);
+
+
+console.log(molens.features[0].properties.NAAM)
+console.log(molens.features[0].geometry.coordinates)
+
