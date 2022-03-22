@@ -1,5 +1,4 @@
 console.log("JS loaded");
-
 // map
 var map = L.map('map').setView([52.0907374, 5.1214201], 8.5);
 
@@ -30,7 +29,7 @@ function getColor(typeMolen){
                                         windmillIcon_Brown;
 }
 
-console.log(molens);
+// console.log(molens);
 
 // Windmill icons
 var windmillIcon = new L.Icon({  
@@ -88,14 +87,43 @@ var windmillIcon_Red = new L.Icon({
   iconUrl: "IMG/windmill_red.png"
 });
 
-
 var molenLayer = L.geoJSON(molens, {
+  onEachFeature: function(feature, layer){
+    layer.bindPopup("<h3 class='popup__naam'>" + feature.properties.NAAM + "<h3>"
+                    + "<p class='popup__text'>Functie: " + feature.properties.FUNCTIE + "<br>"
+                    + "Plaats: " + feature.properties.PLAATS + "<br>"
+                    + "Staat: " + feature.properties.STAAT + "<br>"
+                    + "Bouwjaar: " + feature.properties.BOUWJAAR + "</p>"
+                    // Figure with thumbnail
+                    + "<figure class='popup__figure'> "
+                    + "<img class='popup__figure--image' alt='" + feature.properties.NAAM + "' src='" + feature.properties.THUMBNAIL + "'> "
+                    // onclick='onClick("+[feature.properties.FOTO_GROOT, feature.properties.NAAM]+")'
+                    + "<figcaption class='popup__figure--figcap' > Foto van: " + feature.properties.FOTOGRAAF + "</figcation> "
+                    + "</figure>"
+                    //  Links
+                    + "<p class='pupup__text--links'> <a class='popup__link popup__link--route' target='_blank' href='"+ makeSearchQuery(feature.properties.NAAM) +  "'> Route </a> <br>"
+                    + "<a class='popup__link popup__link--info' target='_blank' href=" + feature.properties.INFOLINK +"> Meer informatie </a> </p>");
+  },
   pointToLayer: function(feature, latlng){
     return L.marker(latlng, {icon: getColor(feature.properties.HFDFUNCTIE)});
   }
 }).addTo(map);
 
+function makeSearchQuery(featureName){
+  // Custom search qeury to google maps for directions to location
+  featureName = featureName.replace(/ /g,"+");
+  featureName = "Molen+" + featureName;
+  searchQuery = "https://www.google.nl/maps/dir//" + featureName;
+  return searchQuery;
+}
+// TODO Fix center marker popup on click
 
-console.log(molens.features[0].properties.NAAM)
-console.log(molens.features[0].geometry.coordinates)
+// TODO Fix large image display
+// function onClick(img, name){
+//   console.log("IN click event " + feature);
+//   // document.getElementById("zoomImage").src = ft[0];
+//   // document.getElementById("zoomImage").alt = ft[1];
+//   // document.getElementById("zoomImageFig").style.display = "block";
+// }
+
 
