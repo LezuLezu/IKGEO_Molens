@@ -60,29 +60,13 @@ body{
     width: 100%;
 }
 
-/* TODO
-    Fix large image display */
-/* .popup__figure--image:hover{
-    cursor: pointer;
-    border: 1px solid red;
+.windmill__icon {
+    background-image: url(../IMG/windmill.png);
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    color: red;
+    box-shadow: 5px 5px 5px 5px #00FFFA;
 }
-.zoom__image--figure{
-    display: none;
-    height: 60vh;
-    width: 60vw;
-    animation: show;
-}
-.zoom__image{
-    height: 90%;
-    width: 90%;
-}
-.zoom__image--Exit{
-    background-color: cadetblue;
-    height: 10%;
-    width: 10%;
-    margin-right: 0%;
-    margin-top: 0%;
-}
-.zoom__image--Exit:hover{
-    background-color: red;
-} */
+

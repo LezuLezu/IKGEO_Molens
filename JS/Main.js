@@ -32,10 +32,11 @@ function getColor(typeMolen){
 // console.log(molens);
 
 // Windmill icons
+
 var windmillIcon = new L.Icon({  
-  iconSize: [25,25],
+  iconSize: [50,50],
   iconAnchor: [13, 27],
-  popupAnchor: [1, -24],
+  textColor: "white",
   iconUrl: "IMG/windmill.png"
 });
 var windmillIcon_Blue = new L.Icon({  
@@ -97,7 +98,6 @@ var molenLayer = L.geoJSON(molens, {
                     // Figure with thumbnail
                     + "<figure class='popup__figure'> "
                     + "<img class='popup__figure--image' alt='" + feature.properties.NAAM + "' src='" + feature.properties.THUMBNAIL + "'> "
-                    // onclick='onClick("+[feature.properties.FOTO_GROOT, feature.properties.NAAM]+")'
                     + "<figcaption class='popup__figure--figcap' > Foto van: " + feature.properties.FOTOGRAAF + "</figcation> "
                     + "</figure>"
                     //  Links
@@ -107,7 +107,31 @@ var molenLayer = L.geoJSON(molens, {
   pointToLayer: function(feature, latlng){
     return L.marker(latlng, {icon: getColor(feature.properties.HFDFUNCTIE)});
   }
-}).addTo(map);
+});
+
+var molenClusters = new L.markerClusterGroup({
+  iconCreateFunction: function(cluster){
+    var html = '<div class="windmill__icon">' + cluster.getChildCount() + '</div>';
+    return L.divIcon({ html: html, className: 'windmill__cluster', iconSize: L.point(32, 32)});
+  },
+  spiderfyOnMaxZoom: false, showCoverageOnHover: true, zoomToBoundsOnClick: false, animateAddingMarkers: true
+}).addLayer(molenLayer);
+
+
+map.addLayer(molenLayer);
+map.addLayer(molenClusters);
+
+map.on('zoom', function(){
+  console.log(map.getZoom())
+  if(map.getZoom() >= 11){
+    map.removeLayer(molenClusters);
+    map.addLayer(molenLayer);
+  }
+  else if(map.getZoom() <= 10){
+    map.removeLayer(molenLayer);
+    map.addLayer(molenClusters);
+  }
+})
 
 function makeSearchQuery(featureName){
   // Custom search qeury to google maps for directions to location
@@ -116,14 +140,8 @@ function makeSearchQuery(featureName){
   searchQuery = "https://www.google.nl/maps/dir//" + featureName;
   return searchQuery;
 }
-// TODO Fix center marker popup on click
+// TODO Fix center marker popup on click 
 
-// TODO Fix large image display
-// function onClick(img, name){
-//   console.log("IN click event " + feature);
-//   // document.getElementById("zoomImage").src = ft[0];
-//   // document.getElementById("zoomImage").alt = ft[1];
-//   // document.getElementById("zoomImageFig").style.display = "block";
-// }
+
 
 
