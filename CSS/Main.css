@@ -16,14 +16,27 @@ body{
     min-width: 100vw;
     display: block;
 }
-
-#map { 
-    position: absolute;
+main{
     height: 100%;
     width: 100%;
+}
+.title__head{
+    text-align: center;
+    font-size: 2rem;
+    height: 10%;
+    padding: 0.5rem;
+}
+#map { 
+    position: absolute;
+    height: 99%;
+    width: 100%;
     margin: 0;
-    padding: 0;
+    padding:0;
  }
+ .leaflet-control-container { 
+     position: absolute; 
+     right: 5% 
+    } 
 .leaflet-popup-content-wrapper{
     width: auto;
     height: auto;
@@ -62,11 +75,16 @@ body{
 
 .windmill__icon {
     background-image: url(../IMG/windmill.png);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
     width: 32px;
     height: 32px;
     line-height: 32px;
     text-align: center;
     color: red;
     box-shadow: 5px 5px 5px 5px #00FFFA;
+    z-index: 500;
 }
 

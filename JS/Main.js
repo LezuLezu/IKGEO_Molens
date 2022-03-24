@@ -117,10 +117,14 @@ var molenClusters = new L.markerClusterGroup({
   spiderfyOnMaxZoom: false, showCoverageOnHover: true, zoomToBoundsOnClick: false, animateAddingMarkers: true
 }).addLayer(molenLayer);
 
-
-map.addLayer(molenLayer);
-map.addLayer(molenClusters);
-
+// Load right layer on opening site
+if(map.getZoom() >= 11){
+  map.addLayer(molenLayer);
+}
+else if(map.getZoom() <= 10){
+  map.addLayer(molenClusters);
+}
+// point to correct layer on zooming in or out
 map.on('zoom', function(){
   console.log(map.getZoom())
   if(map.getZoom() >= 11){
