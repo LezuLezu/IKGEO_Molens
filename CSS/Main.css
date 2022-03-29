@@ -33,16 +33,13 @@ main{
     margin: 0;
     padding:0;
  }
- .lealeaflet-control-zoom { 
-     position: absolute; 
-     right: 15% 
-    } 
 
 .leaflet-popup-content-wrapper{
     width: auto;
     height: auto;
-    max-width: 35rem;
-    max-height: 50rem;
+    max-width: 70vw;
+    max-height: 80vh;
+    overflow: auto;
 }
 .popup__naam{
     font-size: 1.8rem;
@@ -177,18 +174,3 @@ main{
     -ms-border-radius: 50%;
 }
 
-@media screen and (min-width: 31.25rem) {
-    .leaflet-control-container{
-        right: 10%
-    }
-}
-@media screen and (min-width: 43.75rem) {
-    .leaflet-control-container{
-        right: 7.5%
-    }
-}
-@media screen and (min-width: 62.5rem) {
-    .leaflet-control-container{
-        right: 5%
-    }
-}

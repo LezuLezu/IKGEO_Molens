@@ -83,7 +83,7 @@ var windmillIcon_Red = new L.Icon({
 
 var molenLayer = L.geoJSON(molens, {
   onEachFeature: function(feature, layer){
-    layer.bindPopup("<h3 class='popup__naam'>" + feature.properties.NAAM + "<h3>"
+    layer.bindPopup("<h3 class='popup__naam'>" + feature.properties.NAAM + "</h3>"
                     + "<p class='popup__text'>Functie: " + feature.properties.FUNCTIE + "<br>"
                     + "Plaats: " + feature.properties.PLAATS + "<br>"
                     + "Staat: " + feature.properties.STAAT + "<br>"
@@ -145,6 +145,11 @@ map.on('zoom', function(){
 
 
 // TODO Fix center marker popup on click 
+map.on('popupopen', function(e) {
+  let px = map.project(e.target._popup._latlng); // find the pixel location on the map where the popup anchor is
+  px.y -= e.target._popup._container.clientHeight/2; // find the height of the popup container, divide by 2, subtract from the Y axis of marker location
+  map.panTo(map.unproject(px),{animate: true}); // pan to new center
+});
 
 
 function makeSearchQuery(featureName){
