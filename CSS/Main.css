@@ -33,10 +33,11 @@ main{
     margin: 0;
     padding:0;
  }
- .leaflet-control-container { 
+ .lealeaflet-control-zoom { 
      position: absolute; 
-     right: 5% 
+     right: 15% 
     } 
+
 .leaflet-popup-content-wrapper{
     width: auto;
     height: auto;
@@ -74,17 +75,120 @@ main{
 }
 
 .windmill__icon {
-    background-image: url(../IMG/windmill.png);
+    /* base background image */
+    background-image: url('https://i.imgur.com/LCmCJh5.png');
     background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-position: center;
-    background-size: cover;
+    background-position: center;    
+    /* android, chrome, IOS, safari */
+    -webkit-background-image: url('https://i.imgur.com/LCmCJh5.png');
+    -webkit-background-repeat: no-repeat;
+    -webkit-background-position: center;
+    /* firefox */
+    -moz-background-image: url('https://i.imgur.com/LCmCJh5.png');
+    -moz-background-position: center;
+    -moz-background-repeat: no-repeat;
+    /* opera */
+    -o-background-image: url('https://i.imgur.com/LCmCJh5.png');
+    -o-background-repeat: no-repeat;
+    -o-background-position: center;
+    /* internet explorer */
+    -ms-background-image: url('https://i.imgur.com/LCmCJh5.png');
+    -ms-background-repeat: no-repeat;
+    -ms-background-position: center;
     width: 32px;
     height: 32px;
+    
+}
+.windmill__icon--text{
+    display: none;
+}
+.windmill__icon:hover .windmill__icon--text{
     line-height: 32px;
+    font-size: 1.5rem;
     text-align: center;
-    color: red;
-    box-shadow: 5px 5px 5px 5px #00FFFA;
-    z-index: 500;
+    color: #ffffff;
+    font-weight: bold;
+    display: block;
+    cursor: pointer;
 }
 
+.windmill__icon--red{
+    background-color: rgb(255, 0, 0, 0.5);
+    border-radius: 50%;
+    /* android, chrome, IOS, safari */  
+    -webkit-background-color: rgb(255, 0, 0, 0.5);
+    -webkit-border-radius: 50%;
+    /* firefox */
+    -moz-background-color: rgb(255, 0, 0, 0.5);
+    -moz-border-radius: 50%;
+    /* opera */
+    -o-background-color: rgb(255, 0, 0, 0.5);
+    -o-border-radius: 50%;
+    /* internet explorer */
+    -ms-background-color: rgb(255, 0, 0, 0.5);
+    -ms-border-radius: 50%;
+}
+.windmill__icon--orange{
+    background-color: rgb(255, 153, 0, 0.5);
+    border-radius: 50%;
+    /* android, chrome, IOS, safari */
+    -webkit-background-color: rgb(255, 153, 0, 0.5);   
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    /* firefox */
+    -moz-background-color: rgb(255, 153, 0, 0.5);
+    /* opera */
+    -o-background-color: rgb(255, 153, 0, 0.5);
+    -o-border-radius: 50%;
+    /* internet explorer */
+    -ms-background-color: rgb(255, 153, 0, 0.5);
+    -ms-border-radius: 50%;
+}
+.windmill__icon--yellow{
+    background-color: rgb(255, 255, 0, 0.5);
+    border-radius: 50%;
+    /* android, chrome, IOS, safari */
+    -webkit-background-color: rgb(255, 255, 0, 0.5);
+    -webkit-border-radius: 50%;
+    /* firefox */
+    -moz-background-color: rgb(255, 255, 0, 0.5);
+    -moz-border-radius: 50%;
+    /* opera */
+    -o-background-color: rgb(255, 255, 0, 0.5);
+    -o-border-radius: 50%;
+    /* internet explorer */
+    -ms-background-color: rgb(255, 255, 0, 0.5);
+    -ms-border-radius: 50%;
+}
+.windmill__icon--green{
+    background-color: rgb(0, 255, 0, 0.5);
+    border-radius: 50%;
+    /* android, chrome, IOS, safari */
+    -webkit-background-color: rgb(0, 255, 0, 0.5);
+    -webkit-border-radius: 50%;
+    /* firefox */
+    -moz-background-color: rgb(0, 255, 0, 0.5);
+    -moz-border-radius: 50%;
+    /* opera */
+    -o-background-color: rgb(0, 255, 0, 0.5);
+    -o-border-radius: 50%;
+    /* internet explorer */
+    -ms-background-color: rgb(0, 255, 0, 0.5);
+    -ms-border-radius: 50%;
+}
+
+@media screen and (min-width: 31.25rem) {
+    .leaflet-control-container{
+        right: 10%
+    }
+}
+@media screen and (min-width: 43.75rem) {
+    .leaflet-control-container{
+        right: 7.5%
+    }
+}
+@media screen and (min-width: 62.5rem) {
+    .leaflet-control-container{
+        right: 5%
+    }
+}

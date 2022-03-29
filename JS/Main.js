@@ -32,13 +32,6 @@ function getColor(typeMolen){
 // console.log(molens);
 
 // Windmill icons
-
-var windmillIcon = new L.Icon({  
-  iconSize: [50,50],
-  iconAnchor: [13, 27],
-  textColor: "white",
-  iconUrl: "IMG/windmill.png"
-});
 var windmillIcon_Blue = new L.Icon({  
   iconSize: [25,25],
   iconAnchor: [13, 27],
@@ -111,10 +104,22 @@ var molenLayer = L.geoJSON(molens, {
 
 var molenClusters = new L.markerClusterGroup({
   iconCreateFunction: function(cluster){
-    var html = '<div class="windmill__icon">' + cluster.getChildCount() + '</div>';
-    return L.divIcon({ html: html, className: 'windmill__cluster', iconSize: L.point(32, 32)});
+    let childCount = cluster.getChildCount();
+    if(childCount <= 10){
+      windmillBackground = "windmill__icon--green";
+    }else if(childCount > 10 && childCount <= 20){
+      windmillBackground = "windmill__icon--yellow";
+    }else if(childCount > 20 && childCount <= 50){
+      windmillBackground = "windmill__icon--orange";
+    }else if(childCount > 50){
+      windmillBackground = "windmill__icon--red";    }
+    
+    var html = '<div class="windmill__icon"> <p class="windmill__icon--text">' + childCount + '</p></div>';
+
+    return L.divIcon({ html: html, className: 'windmill__cluster ' + windmillBackground, iconSize: L.point(32, 32)});
+    
   },
-  spiderfyOnMaxZoom: false, showCoverageOnHover: true, zoomToBoundsOnClick: false, animateAddingMarkers: true
+  spiderfyOnMaxZoom: false, showCoverageOnHover: true, zoomToBoundsOnClick: true, animateAddingMarkers: true
 }).addLayer(molenLayer);
 
 // Load right layer on opening site
@@ -137,6 +142,11 @@ map.on('zoom', function(){
   }
 })
 
+
+
+// TODO Fix center marker popup on click 
+
+
 function makeSearchQuery(featureName){
   // Custom search qeury to google maps for directions to location
   featureName = featureName.replace(/ /g,"+");
@@ -144,8 +154,4 @@ function makeSearchQuery(featureName){
   searchQuery = "https://www.google.nl/maps/dir//" + featureName;
   return searchQuery;
 }
-// TODO Fix center marker popup on click 
-
-
-
 
