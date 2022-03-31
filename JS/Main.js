@@ -2,10 +2,44 @@ console.log("JS loaded");
 
 // Navigation control
 function openNav() {
-  document.getElementById("sideNav").style.width = "30vw";
+  document.getElementById("sideNav").classList.add("sideNav__open");
 }
 function closeNav() {
-  document.getElementById("sideNav").style.width = "0";
+  document.getElementById("sideNav").classList.remove("sideNav__open");
+}
+// Filter controll
+// if radiobutton for all is checked, check all radio buttons for type of molen
+document.getElementById("windmills--all").addEventListener("click", filterAll);
+function filterAll(){
+  allBoxes = document.getElementsByClassName("filter--windmillType");
+  if(document.getElementById("windmills--all").checked){
+    for(i = 0; i < allBoxes.length; i++){
+      allBoxes[i].checked = true;
+    }
+  }else if(!document.getElementById("windmills--all").checked){
+    for(i = 0; i < allBoxes.length; i++){
+      allBoxes[i].checked = false;
+    }
+  }
+}
+// if any radiobutton is unclicked, uncheck  radio buttons for windmills--all
+let allWindmillBoxes = document.getElementsByClassName("filter--windmillType");
+for(box = 0; box < allWindmillBoxes.length; box++){
+  allWindmillBoxes[box].addEventListener("click", checkAll);
+}
+function checkAll(){
+  allBoxes = document.getElementsByClassName("filter--windmillType");
+  checkCount = 0;
+  for(i = 0; i < allBoxes.length; i++){
+    if(allBoxes[i].checked){
+      checkCount++;
+    }
+  }
+  if(checkCount != allBoxes.length){
+    document.getElementById("windmills--all").checked = false;
+  }else if(checkCount == allBoxes.length){
+    document.getElementById("windmills--all").checked = true;
+  }
 }
 
 // map
