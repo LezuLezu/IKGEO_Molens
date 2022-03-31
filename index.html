@@ -19,11 +19,18 @@
         <link rel="stylesheet" href="CSS/Main.css">
     </head>
     <body>
-        <header class="header">
-            
+        <header class="header">            
+            <nav id="sideNav" class="sideNav">
+                    <span class="sideNav--close" onclick="closeNav()">&times;</span>
+                    <a href="#">Soorten</a>
+                    <a href="#">idk </a>
+                    <a href="#">idk</a>
+                    <a href="#">idk</a>
+            </nav> 
+           <span class="sideNav--open" onclick="openNav()">&#9776; Filters</span>
+           <h1 class="title__head">Molens in Nederland</h1>
         </header>
-        <main>
-            <h1 class="title__head">Molens in Nederland</h1>
+        <main id="main" class="main">           
             <div id="map"></div>
         </main>
         

@@ -9,31 +9,79 @@ html{
     font-family: 'Monda', sans-serif;
     overflow: hidden;
 }
-
+:root{
+    --background-color: #eff5f5;
+    --black: #000;
+    --white: #fff;
+    --nav-color: #262626;
+    --nav-color-hover: #ff8000;
+}
 body{
-    background-color: aqua;
+    background-color: var(--background-color);
     min-height: 100vh;
     min-width: 100vw;
     display: block;
 }
-main{
+.main{
     height: 100%;
     width: 100%;
+    transition: margin-left .5s;
+}
+.header{
+    display: flex;
+    align-items: baseline;
+    padding: 0.8rem;
 }
 .title__head{
     text-align: center;
     font-size: 2rem;
-    height: 10%;
-    padding: 0.5rem;
+    flex-grow: 5;
 }
+/* Navigation    */
+.sideNav--open{
+    font-size: 2rem;
+    cursor: pointer;
+}
+.sideNav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    background-color: var(--background-color);
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 5.5rem;
+}
+.sideNav a {
+    padding: 0.8rem 0.8rem 0.8rem 3.2rem;
+    text-decoration: none;
+    font-size: 2.5rem;
+    color: var(--nav-color);
+    display: block;
+    transition: 0.3s;
+}
+.sideNav a:hover {
+    color: var(--nav-color-hover);
+}
+.sideNav .sideNav--close {
+    position: absolute;
+    top: 0;
+    right: 2.5rem;
+    font-size: 3.6rem;
+    margin-left: 5rem;
+}
+
+/* Map */
 #map { 
     position: absolute;
-    height: 99%;
-    width: 100%;
-    margin: 0;
-    padding:0;
+    top: 4rem;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 0;    
  }
-
 .leaflet-popup-content-wrapper{
     width: auto;
     height: auto;
@@ -174,3 +222,5 @@ main{
     -ms-border-radius: 50%;
 }
 
+
+  

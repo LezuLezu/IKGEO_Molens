@@ -1,13 +1,23 @@
 console.log("JS loaded");
+
+// Navigation control
+function openNav() {
+  document.getElementById("sideNav").style.width = "30vw";
+}
+function closeNav() {
+  document.getElementById("sideNav").style.width = "0";
+}
+
 // map
-var map = L.map('map').setView([52.0907374, 5.1214201], 8.5);
+var map = L.map('map',{zoomControl: false}).setView([52.0907374, 5.1214201], 8.5);
 
 var mapLayer_streets = L.tileLayer('https://api.maptiler.com/maps/streets/{z}/{x}/{y}@2x.png?key=FyhWpGrC4R5xjalBeWSx', {
   attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
 }).addTo(map);
 
 
-scale = L.control.scale().addTo(map);
+scale = L.control.scale({position:'topright'}).addTo(map);
+L.control.zoom({position:'topright'}).addTo(map);
 
 var north = L.control({position: "bottomright"});
 north.onAdd = function() {
