@@ -21,6 +21,7 @@ function filterAll(){
       allBoxes[i].checked = false;
     }
   }
+  updateOnFilter();
 }
 // if any radiobutton is unclicked, uncheck  radio buttons for windmills--all
 let allWindmillBoxes = document.getElementsByClassName("filter--windmillType");
@@ -40,6 +41,7 @@ function checkAll(){
   }else if(checkCount == allBoxes.length){
     document.getElementById("windmills--all").checked = true;
   }
+  updateOnFilter();
 }
 
 // map
@@ -58,7 +60,7 @@ north.onAdd = function() {
   var div = L.DomUtil.create("div", "windroos");
   div.innerHTML = '<img src="IMG/windroos.png" width="75" height="75" alt="north arrow">';
   return div;
-}
+};
 north.addTo(map);
   
 function getColor(typeMolen){
@@ -173,21 +175,6 @@ if(map.getZoom() >= 11){
 else if(map.getZoom() <= 10){
   map.addLayer(molenClusters);
 }
-// point to correct layer on zooming in or out
-map.on('zoom', function(){
-  console.log(map.getZoom())
-  if(map.getZoom() >= 11){
-    map.removeLayer(molenClusters);
-    map.addLayer(molenLayer);
-  }
-  else if(map.getZoom() <= 10){
-    map.removeLayer(molenLayer);
-    map.addLayer(molenClusters);
-  }
-})
-
-
-
 // TODO Fix center marker popup on click 
 map.on('popupopen', function(e) {
   let px = map.project(e.target._popup._latlng); // find the pixel location on the map where the popup anchor is
@@ -195,7 +182,130 @@ map.on('popupopen', function(e) {
   map.panTo(map.unproject(px),{animate: true}); // pan to new center
 });
 
+// Update on filter to apply correct layer 
+let filterLayer = new L.geoJSON(); 
+let filterClusters = new L.markerClusterGroup();
+function updateOnFilter(){
+  if(filterClusters !== undefined){
+    filterClusters.clearLayers();
+  }
+  if(filterLayer !== undefined){
+    filterLayer.clearLayers();
+  }
+  let enabledFilters = {};
+  let checkboxes = document.getElementsByClassName("filter--windmillType");
+  if(! document.getElementById("windmills--all").checked){    // Check wheter all windmills are checked
+    map.removeLayer(molenLayer);    // Remove all windmills (main layer) if not
+    map.removeLayer(molenClusters);   // Remove cluster on main layer
+    for(let i = 0; i < checkboxes.length; i++){   // Loop through all checkboxes
+      if(checkboxes[i].checked){    // Check if checkbox is checked
+        enabledFilters[checkboxes[i].value] = true;   // Add checkbox value to enabledFilters object
+      }      
+    }
+    filterLayer = L.geoJSON(molens, {  // Create new layer with filtered data 
+      onEachFeature: function(feature, layer){    // Loop through all features
+        if(feature.properties.HFDFUNCTIE in enabledFilters){    // Check if feature is in enabledFilters
+          layer.bindPopup("<h3 class='popup__naam'>" + feature.properties.NAAM + "</h3>"    // Add popup
+                    + "<p class='popup__text'>Functie: " + feature.properties.FUNCTIE + "<br>"
+                    + "Plaats: " + feature.properties.PLAATS + "<br>"
+                    + "Staat: " + feature.properties.STAAT + "<br>"
+                    + "Bouwjaar: " + feature.properties.BOUWJAAR + "</p>"
+                    // Figure with thumbnail
+                    + "<figure class='popup__figure'> "
+                    + "<img class='popup__figure--image' alt='" + feature.properties.NAAM + "' src='" + feature.properties.THUMBNAIL + "'> "
+                    + "<figcaption class='popup__figure--figcap' > Foto van: " + feature.properties.FOTOGRAAF + "</figcation> "
+                    + "</figure>"
+                    //  Links
+                    + "<p class='pupup__text--links'> <a class='popup__link popup__link--route' target='_blank' href='"+ makeSearchQuery(feature.properties.NAAM) +  "'> Route </a> <br>"
+                    + "<a class='popup__link popup__link--info' target='_blank' href=" + feature.properties.INFOLINK +"> Meer informatie </a> </p>");
+        }
+      },
+      pointToLayer: function(feature, latlng){    // Add marker to layer
+        if(feature.properties.HFDFUNCTIE in enabledFilters){
+          return L.marker(latlng, {icon: getColor(feature.properties.HFDFUNCTIE)});
+        }
+      }
+    }).addTo(map);
+    // update clusters
+  filterClusters = L.markerClusterGroup({
+    iconCreateFunction: function(cluster){
+      let childCount = cluster.getChildCount();
+      if(childCount <= 10){
+        windmillBackground = "windmill__icon--green";
+      }else if(childCount > 10 && childCount <= 20){
+        windmillBackground = "windmill__icon--yellow";
+      }else if(childCount > 20 && childCount <= 50){
+        windmillBackground = "windmill__icon--orange";
+      }else if(childCount > 50){
+        windmillBackground = "windmill__icon--red";    }
+      
+      var html = '<div class="windmill__icon"> <p class="windmill__icon--text">' + childCount + '</p></div>';
+  
+      return L.divIcon({ html: html, className: 'windmill__cluster ' + windmillBackground, iconSize: L.point(32, 32)});
+      
+    },
+    spiderfyOnMaxZoom: false, showCoverageOnHover: true, zoomToBoundsOnClick: true, animateAddingMarkers: true
+  }).addLayer(filterLayer);
+  }else{    // If all windmills are checked
+    map.removeLayer(filterLayer);   // Remove filtered layer
+    map.addLayer(molenLayer);   // Add main layer
+  }  
+  console.log(enabledFilters);
+  fixZoom();
+  
+}
 
+// point to correct layer on zooming in or out
+map.on('zoom', function(){
+  console.log(map.getZoom());
+  fixZoom();
+});
+// Use correct zoom layer on zooming in or out or filter update
+function fixZoom(){
+  if(map.getZoom() >= 11){
+    if(document.getElementById("windmills--all").checked == true){
+      // remove filter layers
+      map.removeLayer(filterLayer);
+      map.removeLayer(filterClusters);
+      // remove main cluster layer
+      map.removeLayer(molenClusters);
+      // add main layer
+      map.addLayer(molenLayer);
+    }
+    // if windmills--all not checked add filter layers
+    else if(document.getElementById("windmills--all").checked == false){
+      // remove main layers
+      map.removeLayer(molenLayer);
+      map.removeLayer(molenClusters);
+      // remove filter clusters
+      map.removeLayer(filterClusters);
+      // add filter layer
+      map.addLayer(filterLayer);
+    }
+  }
+  else if(map.getZoom() <= 10){
+    if(document.getElementById("windmills--all").checked == true){
+      // remove filter layers
+      map.removeLayer(filterLayer);
+      map.removeLayer(filterClusters);
+      // remove main layer
+      map.removeLayer(molenLayer);
+      // add main cluster layer
+      map.addLayer(molenClusters);
+    }
+    // if windmills--all not checked add filter cluster layer
+    else if(document.getElementById("windmills--all").checked == false){
+      // remove main layers
+      map.removeLayer(molenLayer);
+      map.removeLayer(molenClusters);
+      // remove filter layer
+      map.removeLayer(filterLayer);
+      // add filter cluster layer
+      map.addLayer(filterClusters);
+    }
+  }
+}
+// Routing to wiindmills
 function makeSearchQuery(featureName){
   // Custom search qeury to google maps for directions to location
   featureName = featureName.replace(/ /g,"+");

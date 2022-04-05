@@ -35,8 +35,7 @@ body{
 .header{
     display: flex;
     align-items: baseline;
-    padding: 0.8rem;   
-
+    padding: 0.8rem;  
 }
 .title__head{
     text-align: center;
