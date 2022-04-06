@@ -1,5 +1,63 @@
 console.log("JS loaded");
 
+// Const vars
+// Counts for clusters
+const lowCount = 20;
+const low_medCount = 50;
+const med_highCount = 80;
+// Zoom min/max
+const zoomMax_to_molenClusters = 10;
+const zoomMin_to_molenLayer = 11;
+// Windmill icons
+const windmillIcon_Blue = new L.Icon({  
+  iconSize: [25,25],
+  iconAnchor: [13, 27],
+  popupAnchor: [1, -24],
+  iconUrl: "IMG/blue_windmills/windmill_blue_25.png"
+});
+const windmillIcon_Brown = new L.Icon({  
+  iconSize: [25,25],
+  iconAnchor: [13, 27],
+  popupAnchor: [1, -24],
+  iconUrl: "IMG/brown_windmills/windmill_brown_25.png"
+});
+const windmillIcon_Cyan = new L.Icon({  
+  iconSize: [25,25],
+  iconAnchor: [13, 27],
+  popupAnchor: [1, -24],
+  iconUrl: "IMG/cyan_windmills/windmill_cyan_25.png"
+});
+const windmillIcon_Green = new L.Icon({  
+  iconSize: [25,25],
+  iconAnchor: [13, 27],
+  popupAnchor: [1, -24],
+  iconUrl: "IMG/green_windmills/windmill_green_25.png"
+});
+const windmillIcon_Orange = new L.Icon({  
+  iconSize: [25,25],
+  iconAnchor: [13, 27],
+  popupAnchor: [1, -24],
+  iconUrl: "IMG/orange_windmills/windmill_orange_25.png"
+});
+const windmillIcon_Pink = new L.Icon({  
+  iconSize: [25,25],
+  iconAnchor: [13, 27],
+  popupAnchor: [1, -24],
+  iconUrl: "IMG/pink_windmills/windmill_pink_25.png"
+});
+const windmillIcon_Purple = new L.Icon({  
+  iconSize: [25,25],
+  iconAnchor: [13, 27],
+  popupAnchor: [1, -24],
+  iconUrl: "IMG/purple_windmills/windmill_purple_25.png"
+});
+const windmillIcon_Red = new L.Icon({  
+  iconSize: [25,25],
+  iconAnchor: [13, 27],
+  popupAnchor: [1, -24],
+  iconUrl: "IMG/red_windmills/windmill_red_25.png"
+});
+
 // Navigation control
 function openNav() {
   document.getElementById("sideNav").classList.add("sideNav__open");
@@ -24,7 +82,7 @@ function filterAll(){
   updateOnFilter();
 }
 // if any radiobutton is unclicked, uncheck  radio buttons for windmills--all
-let allWindmillBoxes = document.getElementsByClassName("filter--windmillType");
+const allWindmillBoxes = document.getElementsByClassName("filter--windmillType");
 for(box = 0; box < allWindmillBoxes.length; box++){
   allWindmillBoxes[box].addEventListener("click", checkAll);
 }
@@ -45,9 +103,9 @@ function checkAll(){
 }
 
 // map
-var map = L.map('map',{zoomControl: false}).setView([52.0907374, 5.1214201], 8.5);
+let map = L.map('map',{zoomControl: false}).setView([52.0907374, 5.1214201], 8.5);
 
-var mapLayer_streets = L.tileLayer('https://api.maptiler.com/maps/streets/{z}/{x}/{y}@2x.png?key=FyhWpGrC4R5xjalBeWSx', {
+let mapLayer_streets = L.tileLayer('https://api.maptiler.com/maps/streets/{z}/{x}/{y}@2x.png?key=FyhWpGrC4R5xjalBeWSx', {
   attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
 }).addTo(map);
 
@@ -55,13 +113,30 @@ var mapLayer_streets = L.tileLayer('https://api.maptiler.com/maps/streets/{z}/{x
 scale = L.control.scale({position:'topright'}).addTo(map);
 L.control.zoom({position:'topright'}).addTo(map);
 
-var north = L.control({position: "bottomright"});
+let north = L.control({position: "bottomright"});
 north.onAdd = function() {
-  var div = L.DomUtil.create("div", "windroos");
-  div.innerHTML = '<img src="IMG/windroos.png" width="75" height="75" alt="north arrow">';
+  let div = L.DomUtil.create("div", "windroos");
+  div.innerHTML = '<img src="IMG/windroos/windroos_75x75.png" width="75" height="75" alt="north arrow">';
   return div;
 };
 north.addTo(map);
+
+// Additional control place holders
+function addControlPlaceholders(map) {
+  let corners = map._controlCorners,
+      l = 'leaflet-',
+      container = map._controlContainer;
+
+  function createCorner(vSide, hSide) {
+      let className = l + vSide + ' ' + l + hSide;
+
+      corners[vSide + hSide] = L.DomUtil.create('div', className, container);
+  }
+
+  createCorner('verticalcenter', 'left');
+  createCorner('verticalcenter', 'right');
+}
+addControlPlaceholders(map);
   
 function getColor(typeMolen){
     return  typeMolen == "industriemolen" ? windmillIcon_Purple :
@@ -77,57 +152,55 @@ function getColor(typeMolen){
 
 // console.log(molens);
 
-// Windmill icons
-var windmillIcon_Blue = new L.Icon({  
-  iconSize: [25,25],
-  iconAnchor: [13, 27],
-  popupAnchor: [1, -24],
-  iconUrl: "IMG/windmill_blue.png"
-});
-var windmillIcon_Brown = new L.Icon({  
-  iconSize: [25,25],
-  iconAnchor: [13, 27],
-  popupAnchor: [1, -24],
-  iconUrl: "IMG/windmill_brown.png"
-});
-var windmillIcon_Cyan = new L.Icon({  
-  iconSize: [25,25],
-  iconAnchor: [13, 27],
-  popupAnchor: [1, -24],
-  iconUrl: "IMG/windmill_cyan.png"
-});
-var windmillIcon_Green = new L.Icon({  
-  iconSize: [25,25],
-  iconAnchor: [13, 27],
-  popupAnchor: [1, -24],
-  iconUrl: "IMG/windmill_green.png"
-});
-var windmillIcon_Orange = new L.Icon({  
-  iconSize: [25,25],
-  iconAnchor: [13, 27],
-  popupAnchor: [1, -24],
-  iconUrl: "IMG/windmill_orange.png"
-});
-var windmillIcon_Pink = new L.Icon({  
-  iconSize: [25,25],
-  iconAnchor: [13, 27],
-  popupAnchor: [1, -24],
-  iconUrl: "IMG/windmill_pink.png"
-});
-var windmillIcon_Purple = new L.Icon({  
-  iconSize: [25,25],
-  iconAnchor: [13, 27],
-  popupAnchor: [1, -24],
-  iconUrl: "IMG/windmill_purple.png"
-});
-var windmillIcon_Red = new L.Icon({  
-  iconSize: [25,25],
-  iconAnchor: [13, 27],
-  popupAnchor: [1, -24],
-  iconUrl: "IMG/windmill_red.png"
-});
+// Legenda
+let showLegend = true;
+let legendButton = L.control({position: 'topright'});
+legendButton.onAdd= function(){
+  let legendButtonDiv = L.DomUtil.create('div', 'legend--button-container');
+  legendButtonDiv.innerHTML += "<button class='legend--button' id='legend_button' onclick='toggleLegend()' ontouchend='toggleLegend()' >Verberg legenda</button>";
+  return legendButtonDiv
+}
+legendButton.addTo(map);
 
-var molenLayer = L.geoJSON(molens, {
+let legend = L.control({position: 'verticalcenterright'});
+legend.onAdd = function(){
+  let legendDiv = L.DomUtil.create('div', 'legend');
+  legendDiv.setAttribute("id", "legend");
+  legendDiv.innerHTML += "<h3 class='legend--header'>Legenda</h3>";
+  legendDiv.innerHTML += "<h5 class='legend--header-2'>Cluster indicatie</h5>";
+  legendDiv.innerHTML += "<section class='legend--section'><div class='windmill__icon windmill__icon--red legend--icon'></div><p class='legend--text'>Vanaf " + med_highCount + " molens</p>";
+  legendDiv.innerHTML += "<section class='legend--section'><div class='windmill__icon windmill__icon--orange legend--icon'></div><p class='legend--text'>"+ low_medCount + " tot " + med_highCount + " molens</p>";
+  legendDiv.innerHTML += "<section class='legend--section'><div class='windmill__icon windmill__icon--yellow legend--icon'></div><p class='legend--text'>"+ lowCount + " tot " + low_medCount + " molens</p>";
+  legendDiv.innerHTML += "<section class='legend--section'><div class='windmill__icon windmill__icon--green legend--icon'></div><p class='legend--text'>Tot " + lowCount + " Molens</p>";
+  legendDiv.innerHTML += "<h5 class='legend--header-2'>Hoofdfunctie molens</h5>";
+  legendDiv.innerHTML += "<section class='legend--section'><div class='legend__windmill_icon--purple legend--icon'></div><p class='legend--text'>Industriemolen</p>";
+  legendDiv.innerHTML += "<section class='legend--section'><div class='legend__windmill_icon--pink legend--icon'></div><p class='legend--text'>Koren/industriemolen</p>";
+  legendDiv.innerHTML += "<section class='legend--section'><div class='legend__windmill_icon--orange legend--icon'></div><p class='legend--text'>Koren/zaagmolen</p>";
+  legendDiv.innerHTML += "<section class='legend--section'><div class='legend__windmill_icon--red legend--icon'></div><p class='legend--text'>Korenmolen</p>";
+  legendDiv.innerHTML += "<section class='legend--section'><div class='legend__windmill_icon--blue legend--icon'></div><p class='legend--text'>Poldermolen</p>";
+  legendDiv.innerHTML += "<section class='legend--section'><div class='legend__windmill_icon--green legend--icon'></div><p class='legend--text'>Zaagmolen</p>";
+  legendDiv.innerHTML += "<section class='legend--section'><div class='legend__windmill_icon--brown legend--icon'></div><p class='legend--text'>Onbekende molen</p>";
+
+  return legendDiv
+}
+legend.addTo(map);
+
+function toggleLegend(){
+  let legend = document.getElementById("legend");
+  let button_text = document.getElementById("legend_button");
+  if(showLegend){
+    legend.style.display = "none";
+    showLegend = false;
+    button_text.innerHTML = "Toon legenda";
+  }else{
+    legend.style.display = "block";
+    showLegend = true;
+    button_text.innerHTML = "Verberg legenda";
+  }
+}
+
+
+let molenLayer = L.geoJSON(molens, {
   onEachFeature: function(feature, layer){
     layer.bindPopup("<h3 class='popup__naam'>" + feature.properties.NAAM + "</h3>"
                     + "<p class='popup__text'>Functie: " + feature.properties.FUNCTIE + "<br>"
@@ -147,20 +220,20 @@ var molenLayer = L.geoJSON(molens, {
     return L.marker(latlng, {icon: getColor(feature.properties.HFDFUNCTIE)});
   }
 });
-
-var molenClusters = new L.markerClusterGroup({
+// Clusters for main molen layer
+let molenClusters = new L.markerClusterGroup({
   iconCreateFunction: function(cluster){
     let childCount = cluster.getChildCount();
-    if(childCount <= 10){
+    if(childCount <= lowCount){
       windmillBackground = "windmill__icon--green";
-    }else if(childCount > 10 && childCount <= 20){
+    }else if(childCount > lowCount && childCount <= low_medCount){
       windmillBackground = "windmill__icon--yellow";
-    }else if(childCount > 20 && childCount <= 50){
+    }else if(childCount > low_medCount && childCount <= med_highCount){
       windmillBackground = "windmill__icon--orange";
-    }else if(childCount > 50){
+    }else if(childCount > med_highCount){
       windmillBackground = "windmill__icon--red";    }
     
-    var html = '<div class="windmill__icon"> <p class="windmill__icon--text">' + childCount + '</p></div>';
+    let html = '<div class="windmill__icon"> <p class="windmill__icon--text">' + childCount + '</p></div>';
 
     return L.divIcon({ html: html, className: 'windmill__cluster ' + windmillBackground, iconSize: L.point(32, 32)});
     
@@ -169,10 +242,10 @@ var molenClusters = new L.markerClusterGroup({
 }).addLayer(molenLayer);
 
 // Load right layer on opening site
-if(map.getZoom() >= 11){
+if(map.getZoom() >= zoomMin_to_molenLayer){
   map.addLayer(molenLayer);
 }
-else if(map.getZoom() <= 10){
+else if(map.getZoom() <= zoomMax_to_molenClusters){
   map.addLayer(molenClusters);
 }
 // TODO Fix center marker popup on click 
@@ -230,16 +303,16 @@ function updateOnFilter(){
   filterClusters = L.markerClusterGroup({
     iconCreateFunction: function(cluster){
       let childCount = cluster.getChildCount();
-      if(childCount <= 10){
+      if(childCount <= lowCount){
         windmillBackground = "windmill__icon--green";
-      }else if(childCount > 10 && childCount <= 20){
+      }else if(childCount > lowCount && childCount <= low_medCount){
         windmillBackground = "windmill__icon--yellow";
-      }else if(childCount > 20 && childCount <= 50){
+      }else if(childCount > low_medCount && childCount <= med_highCount){
         windmillBackground = "windmill__icon--orange";
-      }else if(childCount > 50){
+      }else if(childCount > med_highCount){
         windmillBackground = "windmill__icon--red";    }
       
-      var html = '<div class="windmill__icon"> <p class="windmill__icon--text">' + childCount + '</p></div>';
+      let html = '<div class="windmill__icon"> <p class="windmill__icon--text">' + childCount + '</p></div>';
   
       return L.divIcon({ html: html, className: 'windmill__cluster ' + windmillBackground, iconSize: L.point(32, 32)});
       
@@ -262,7 +335,7 @@ map.on('zoom', function(){
 });
 // Use correct zoom layer on zooming in or out or filter update
 function fixZoom(){
-  if(map.getZoom() >= 11){
+  if(map.getZoom() >= zoomMin_to_molenLayer){
     if(document.getElementById("windmills--all").checked == true){
       // remove filter layers
       map.removeLayer(filterLayer);
@@ -283,7 +356,7 @@ function fixZoom(){
       map.addLayer(filterLayer);
     }
   }
-  else if(map.getZoom() <= 10){
+  else if(map.getZoom() <= zoomMax_to_molenClusters){
     if(document.getElementById("windmills--all").checked == true){
       // remove filter layers
       map.removeLayer(filterLayer);
