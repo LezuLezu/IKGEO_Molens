@@ -99,8 +99,32 @@ function checkAll(){
   }else if(checkCount == allBoxes.length){
     document.getElementById("windmills--all").checked = true;
   }
-  updateOnFilter();
+  updateOnFilter("all");
 }
+// Remains filters checkboxes
+// document.getElementById("windmills--restanten").addEventListener("click", restantClick);
+// document.getElementById('windmills--no-restanten').addEventListener('click', noRestantClick);
+
+
+// TODO add filter boxes for all conditions
+// function restantClick(){
+//   const no_restant = document.getElementById('windmills--no-restanten');
+//   const restant = document.getElementById('windmills--restanten');
+//   no_restant.checked = false  
+//   if(!restant.checked){
+//     no_restant.checked = true;
+//   }
+//   updateOnFilter('all');
+// }
+// function noRestantClick(){
+//   const no_restant = document.getElementById('windmills--no-restanten');
+//   const restant = document.getElementById('windmills--restanten');
+//   restant.checked = false  
+//   if(!no_restant.checked){
+//     restant.checked = true;
+//   }
+//   updateOnFilter('bestaand');
+// }
 
 // map
 let map = L.map('map',{zoomControl: false}).setView([52.0907374, 5.1214201], 8.5);
@@ -153,16 +177,18 @@ function getColor(typeMolen){
 // console.log(molens);
 
 // Legenda
-let showLegend = true;
+
 let legendButton = L.control({position: 'topright'});
 legendButton.onAdd= function(){
   let legendButtonDiv = L.DomUtil.create('div', 'legend--button-container');
-  legendButtonDiv.innerHTML += "<button class='legend--button' id='legend_button' onclick='toggleLegend()' ontouchend='toggleLegend()' >Verberg legenda</button>";
+  legendButtonDiv.innerHTML += "<button class='legend--button' id='legend_button' onmousedown='toggleLegend()' >Verberg legenda</button>";
   return legendButtonDiv
 }
 legendButton.addTo(map);
 
 let legend = L.control({position: 'verticalcenterright'});
+let showLegend = true;
+
 legend.onAdd = function(){
   let legendDiv = L.DomUtil.create('div', 'legend');
   legendDiv.setAttribute("id", "legend");
@@ -184,21 +210,20 @@ legend.onAdd = function(){
   return legendDiv
 }
 legend.addTo(map);
+toggleLegend();
 
 function toggleLegend(){
-  let legend = document.getElementById("legend");
-  let button_text = document.getElementById("legend_button");
   if(showLegend){
-    legend.style.display = "none";
+    document.getElementById("legend").style.display = "block";
+    document.getElementById("legend_button").innerHTML = "Verberg legenda";
     showLegend = false;
-    button_text.innerHTML = "Toon legenda";
-  }else{
-    legend.style.display = "block";
+  }
+  else{
+    document.getElementById("legend").style.display = "none";
+    document.getElementById("legend_button").innerHTML = "Toon legenda";
     showLegend = true;
-    button_text.innerHTML = "Verberg legenda";
   }
 }
-
 
 let molenLayer = L.geoJSON(molens, {
   onEachFeature: function(feature, layer){
@@ -258,7 +283,7 @@ map.on('popupopen', function(e) {
 // Update on filter to apply correct layer 
 let filterLayer = new L.geoJSON(); 
 let filterClusters = new L.markerClusterGroup();
-function updateOnFilter(){
+function updateOnFilter(status){
   if(filterClusters !== undefined){
     filterClusters.clearLayers();
   }
@@ -266,6 +291,8 @@ function updateOnFilter(){
     filterLayer.clearLayers();
   }
   let enabledFilters = {};
+  
+
   let checkboxes = document.getElementsByClassName("filter--windmillType");
   if(! document.getElementById("windmills--all").checked){    // Check wheter all windmills are checked
     map.removeLayer(molenLayer);    // Remove all windmills (main layer) if not
@@ -378,7 +405,7 @@ function fixZoom(){
     }
   }
 }
-// Routing to wiindmills
+// Routing to windmills
 function makeSearchQuery(featureName){
   // Custom search qeury to google maps for directions to location
   featureName = featureName.replace(/ /g,"+");
