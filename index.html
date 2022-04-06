@@ -14,6 +14,7 @@
         integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
         crossorigin=""></script>        
         <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+
         
 
         <link rel="stylesheet" href="CSS/Main.css">
@@ -26,11 +27,11 @@
                     <span class="sideNav--close" onclick="closeNav()">&times; </span>
                 </div>
                 <div class="filter">
-                    <p class="filter--title">Type molen:</p>
+                    <p class="filter--title">Hoofdfunctie molen:</p>
                     <!-- All molens -->
                     <label class="filter--label" for="windmills--all">
                         <input class="filter--checkbox " type="checkbox" name="windmills--all" id="windmills--all" value="all" checked>
-                        Alle soorten
+                        Alle functies
                     </label>
                     <br>
                     <!-- Industrie molen -->
@@ -75,17 +76,11 @@
                         Zaagmolen
                     </label>
                 </div>
-                
             </nav> 
            <span class="sideNav--open" onclick="openNav()">&#9776; Filters</span>
            <h1 class="title__head">Molens in Nederland</h1>
-
-      
-            
-            
-
         </header>
-        <main id="main" class="main">           
+        <main id="main" class="main">                   
             <div id="map"></div>
         </main>
         
