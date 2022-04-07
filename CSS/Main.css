@@ -125,6 +125,15 @@ body{
     background-color: var(--nav-color-hover);
 }
 
+.legend--color-density{
+    grid-column: 1;
+    place-self: center;
+    width: 2rem;
+    height: 2rem;
+    opacity: 0.7;
+    border: 0.2rem solid var(--nav-color);
+}
+
 /* Navigation    */
 .sideNav--open{
     font-size: 2rem;
@@ -191,6 +200,81 @@ body{
 .filter--checkbox:checked{
     box-shadow: inset 0 0 0 0.9rem var(--nav-color-hover--rgba);
 }
+
+/* density slider */
+.filter--switch {
+    position: relative;
+    display: inline-block;
+    width: 5rem;
+    height: 2.4rem;
+    grid-column-start: 2;
+    align-self: center;
+}
+.filter--density{ 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.filter--slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--dark-blue);
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 34px;
+}
+.filter--slider:before {
+    position: absolute;
+    content: "";
+    height: 2.3rem;
+    width: 2.3rem;
+    left: 0.1rem;
+    bottom: 0;
+    background-color: var(--background-color);
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 50%;
+}
+.filter--density:checked + .filter--slider {
+    background-color: var(--nav-color-hover);
+}
+
+.filter--density:focus + .slider {
+    box-shadow: 0 0 1px var(--dark-blue);
+}
+.filter--density:hover{
+    cursor: pointer;
+}
+.filter--density:checked + .filter--slider:before {
+    -o-transform: translateX(26px);
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+.slider--container{
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    justify-items: center;
+}
+.slider--text{
+    font-size: 1.2rem;    
+}
+.slider--text-off{
+    grid-column-start: 1;
+    align-self: center;
+}
+.slider--text-on{
+    grid-column-start: 3;
+    align-self: center;
+}
+.title--small{
+    font-size: 0.9rem;
+}
+
 .border-top{
     border-top: 1px solid var(--nav-color);
 }

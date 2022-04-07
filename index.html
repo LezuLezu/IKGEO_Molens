@@ -101,6 +101,19 @@
                         restant
                     </label>       
                 </div>
+                <div class="filter border-bottom">
+                    <p class="filter--title">Dichtheid per provincie tonen:</p>
+                    <p class="filter--title title--small">(Alle molens)</p>
+                    <div class="slider--container">
+                        <p class="slider--text slider--text-off">Uit</p>
+                        <label class="filter--label filter--switch" for="density">
+                            <input class="filter--checkbox filter--density" type="checkbox" name="density" id="density" value="density">
+                            <span class="filter--slider"></span>
+                        </label>
+                        <p class="slider--text slider--text-on">Aan</p>
+                    </div>
+                    
+                </div>
             </nav> 
            <span class="sideNav--open" onclick="openNav()">&#9776; Filters</span>
            <h1 class="title__head">Molens in Nederland</h1>
@@ -110,6 +123,7 @@
         </main>
         
         <script src="GeoJSON/molens_epsg_4326.geojson"></script>
+        <script src="GeoJSON/ned_prov_density_4326.geojson"></script>
         <script type="text/javascript" src="JS/Main.js"></script>
     </body>
 </html>
