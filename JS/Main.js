@@ -58,81 +58,12 @@ const windmillIcon_Red = new L.Icon({
   iconUrl: "IMG/red_windmills/windmill_red_25.png"
 });
 
-// Navigation control
-function openNav() {
-  document.getElementById("sideNav").classList.add("sideNav__open");
-}
-function closeNav() {
-  document.getElementById("sideNav").classList.remove("sideNav__open");
-}
-// Filter controll
-// if radiobutton for all is checked, check all radio buttons for type of molen
-document.getElementById("windmills--all").addEventListener("click", filterAll);
-function filterAll(){
-  allBoxes = document.getElementsByClassName("filter--windmillType");
-  if(document.getElementById("windmills--all").checked){
-    for(i = 0; i < allBoxes.length; i++){
-      allBoxes[i].checked = true;
-    }
-  }else if(!document.getElementById("windmills--all").checked){
-    for(i = 0; i < allBoxes.length; i++){
-      allBoxes[i].checked = false;
-    }
-  }
-  updateOnFilter();
-}
-// if any radiobutton is unclicked, uncheck  radio buttons for windmills--all
-const allWindmillBoxes = document.getElementsByClassName("filter--windmillType");
-for(box = 0; box < allWindmillBoxes.length; box++){
-  allWindmillBoxes[box].addEventListener("click", checkAll);
-}
-function checkAll(){
-  allBoxes = document.getElementsByClassName("filter--windmillType");
-  checkCount = 0;
-  for(i = 0; i < allBoxes.length; i++){
-    if(allBoxes[i].checked){
-      checkCount++;
-    }
-  }
-  if(checkCount != allBoxes.length){
-    document.getElementById("windmills--all").checked = false;
-  }else if(checkCount == allBoxes.length){
-    document.getElementById("windmills--all").checked = true;
-  }
-  updateOnFilter("all");
-}
-// Remains filters checkboxes
-// document.getElementById("windmills--restanten").addEventListener("click", restantClick);
-// document.getElementById('windmills--no-restanten').addEventListener('click', noRestantClick);
-
-
-// TODO add filter boxes for all conditions
-// function restantClick(){
-//   const no_restant = document.getElementById('windmills--no-restanten');
-//   const restant = document.getElementById('windmills--restanten');
-//   no_restant.checked = false  
-//   if(!restant.checked){
-//     no_restant.checked = true;
-//   }
-//   updateOnFilter('all');
-// }
-// function noRestantClick(){
-//   const no_restant = document.getElementById('windmills--no-restanten');
-//   const restant = document.getElementById('windmills--restanten');
-//   restant.checked = false  
-//   if(!no_restant.checked){
-//     restant.checked = true;
-//   }
-//   updateOnFilter('bestaand');
-// }
-
 // map
 let map = L.map('map',{zoomControl: false}).setView([52.0907374, 5.1214201], 8.5);
 
 let mapLayer_streets = L.tileLayer('https://api.maptiler.com/maps/streets/{z}/{x}/{y}@2x.png?key=FyhWpGrC4R5xjalBeWSx', {
   attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
 }).addTo(map);
-
 
 scale = L.control.scale({position:'topright'}).addTo(map);
 L.control.zoom({position:'topright'}).addTo(map);
@@ -174,10 +105,7 @@ function getColor(typeMolen){
                                         windmillIcon_Brown;
 }
 
-// console.log(molens);
-
 // Legenda
-
 let legendButton = L.control({position: 'topright'});
 legendButton.onAdd= function(){
   let legendButtonDiv = L.DomUtil.create('div', 'legend--button-container');
@@ -283,28 +211,36 @@ map.on('popupopen', function(e) {
 // Update on filter to apply correct layer 
 let filterLayer = new L.geoJSON(); 
 let filterClusters = new L.markerClusterGroup();
-function updateOnFilter(status){
+function updateOnFilter(){
   if(filterClusters !== undefined){
     filterClusters.clearLayers();
   }
   if(filterLayer !== undefined){
     filterLayer.clearLayers();
   }
-  let enabledFilters = {};
-  
+  let enabledTypeFilters = {};
+  let enabledStateFilters = {};
 
-  let checkboxes = document.getElementsByClassName("filter--windmillType");
-  if(! document.getElementById("windmills--all").checked){    // Check wheter all windmills are checked
+  const typeCheckboxes = document.getElementsByClassName("filter--windmillType");
+  const stateCheckboxes = document.getElementsByClassName("filter--windmillState");
+
+  if(!document.getElementById("windmills--all").checked || !document.getElementById("status--all".checked)){    // Check wheter all windmills are checked
+    // console.log("Not all windmills are checked");
     map.removeLayer(molenLayer);    // Remove all windmills (main layer) if not
     map.removeLayer(molenClusters);   // Remove cluster on main layer
-    for(let i = 0; i < checkboxes.length; i++){   // Loop through all checkboxes
-      if(checkboxes[i].checked){    // Check if checkbox is checked
-        enabledFilters[checkboxes[i].value] = true;   // Add checkbox value to enabledFilters object
+    for(let i = 0; i < typeCheckboxes.length; i++){   // Loop through all typeCheckboxes
+      if(typeCheckboxes[i].checked){    // Check if checkbox is checked
+        enabledTypeFilters[typeCheckboxes[i].value] = true;   // Add checkbox value to enabledTypeFilters object
+      }      
+    }
+    for(let i = 0; i < stateCheckboxes.length; i++){   // Loop through all stateCheckboxes
+      if(stateCheckboxes[i].checked){    // Check if checkbox is checked
+        enabledStateFilters[stateCheckboxes[i].value] = true;   // Add checkbox value to enabledStateFilters object
       }      
     }
     filterLayer = L.geoJSON(molens, {  // Create new layer with filtered data 
       onEachFeature: function(feature, layer){    // Loop through all features
-        if(feature.properties.HFDFUNCTIE in enabledFilters){    // Check if feature is in enabledFilters
+        if(feature.properties.HFDFUNCTIE in enabledTypeFilters && feature.properties.STAAT in enabledStateFilters){    // Check if feature is in enabled[]Filters
           layer.bindPopup("<h3 class='popup__naam'>" + feature.properties.NAAM + "</h3>"    // Add popup
                     + "<p class='popup__text'>Functie: " + feature.properties.FUNCTIE + "<br>"
                     + "Plaats: " + feature.properties.PLAATS + "<br>"
@@ -321,7 +257,7 @@ function updateOnFilter(status){
         }
       },
       pointToLayer: function(feature, latlng){    // Add marker to layer
-        if(feature.properties.HFDFUNCTIE in enabledFilters){
+        if(feature.properties.HFDFUNCTIE in enabledTypeFilters && feature.properties.STAAT in enabledStateFilters){
           return L.marker(latlng, {icon: getColor(feature.properties.HFDFUNCTIE)});
         }
       }
@@ -350,14 +286,15 @@ function updateOnFilter(status){
     map.removeLayer(filterLayer);   // Remove filtered layer
     map.addLayer(molenLayer);   // Add main layer
   }  
-  console.log(enabledFilters);
+  // console.log(enabledTypeFilters);
+  // console.log(enabledStateFilters);
   fixZoom();
   
 }
 
 // point to correct layer on zooming in or out
 map.on('zoom', function(){
-  console.log(map.getZoom());
+  // console.log(map.getZoom());
   fixZoom();
 });
 // Use correct zoom layer on zooming in or out or filter update
@@ -405,6 +342,56 @@ function fixZoom(){
     }
   }
 }
+
+// Navigation control
+function openNav() {
+  document.getElementById("sideNav").classList.add("sideNav__open");
+}
+function closeNav() {
+  document.getElementById("sideNav").classList.remove("sideNav__open");
+}
+// Filter controll
+// if radiobutton for all is checked, check all radio buttons for type of molen and status
+document.getElementById("windmills--all").addEventListener("click", function(){filterAll("windmills--all", "filter--windmillType")});
+document.getElementById("status--all").addEventListener('click', function(){filterAll("status--all", "filter--windmillState")});
+function filterAll(id, className){
+  allBoxes = document.getElementsByClassName(className);
+  if(document.getElementById(id).checked){
+    for(i = 0; i < allBoxes.length; i++){
+      allBoxes[i].checked = true;
+    }
+  }else if(!document.getElementById(id).checked){
+    for(i = 0; i < allBoxes.length; i++){
+      allBoxes[i].checked = false;
+    }
+  }
+  updateOnFilter();
+}
+// if any radiobutton is unclicked, uncheck  radio buttons for windmills--all
+const allWindmillBoxes = document.getElementsByClassName("filter--windmillType");
+for(box = 0; box < allWindmillBoxes.length; box++){
+  allWindmillBoxes[box].addEventListener("click", function(){checkAll("windmills--all", "filter--windmillType")});
+}
+const allStatusBoxes = document.getElementsByClassName("filter--windmillState");
+for(box = 0; box < allStatusBoxes.length; box++){
+  allStatusBoxes[box].addEventListener("click", function(){checkAll("status--all", "filter--windmillState")});
+}
+function checkAll(id, className){
+  allBoxes = document.getElementsByClassName(className);
+  checkCount = 0;
+  for(i = 0; i < allBoxes.length; i++){
+    if(allBoxes[i].checked){
+      checkCount++;
+    }
+  }
+  if(checkCount != allBoxes.length){
+    document.getElementById(id).checked = false;
+  }else if(checkCount == allBoxes.length){
+    document.getElementById(id).checked = true;
+  }
+  updateOnFilter();
+}
+
 // Routing to windmills
 function makeSearchQuery(featureName){
   // Custom search qeury to google maps for directions to location

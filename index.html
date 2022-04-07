@@ -76,18 +76,31 @@
                         Zaagmolen
                     </label>
                 </div>
-                <!-- <div class="filter border-bottom">
-                    <p class="filter--title">Restanten tonen:</p>
-                    <label class="filter--label" for="windmills--restanten">
-                        <input class="filter--checkbox filter--restant" type="checkbox" name="windmills--restanten" id="windmills--restanten" value="restanten" checked>
-                        Restanten tonen
+                <div class="filter border-bottom">
+                    <p class="filter--title">Fysieke status:</p>
+                    <!-- Make filter checkboxes for alle, bestaand, herbouwd, in aanbouw, restant -->
+                    <label class="filter--label" for="status--all">
+                        <input class="filter--checkbox" type="checkbox" name="status--all" id="status--all" value="all" checked>
+                        Alle
                     </label>
-                        
-                    <label class="filter--label" for="windmills--no-restanten">
-                        <input class="filter--checkbox filter--restant" type="checkbox" name="windmills--no-restanten" id="windmills--no-restanten" value="no-restanten" >
-                        Restanten niet tonen
+                    <label class="filter--label" for="status--bestaand">
+                        <input class="filter--checkbox filter--windmillState" type="checkbox" name="status--bestaand" id="status--bestaand" value="bestaand" checked>
+                        Bestaand    
+                    </label>
+                    <label class="filter--label" for="status--herbouwd">
+                        <input class="filter--checkbox filter--windmillState" type="checkbox" name="status--herbouwd" id="status--herbouwd" value="herbouwd" checked>
+                        Herbouwd
+                    </label>
+
+                    <label class="filter--label" for="status--in aanbouw">
+                        <input class="filter--checkbox filter--windmillState" type="checkbox" name="status--in aanbouw" id="status--in aanbouw" value="in aanbouw" checked>
+                        In aanbouw
+                    </label>
+                    <label class="filter--label" for="status--restant">
+                        <input class="filter--checkbox filter--windmillState" type="checkbox" name="status--restant" id="status--restant" value="restant" checked>
+                        restant
                     </label>       
-                </div> -->
+                </div>
             </nav> 
            <span class="sideNav--open" onclick="openNav()">&#9776; Filters</span>
            <h1 class="title__head">Molens in Nederland</h1>
