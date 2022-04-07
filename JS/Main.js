@@ -76,6 +76,38 @@ north.onAdd = function() {
 };
 north.addTo(map);
 
+// Windmill density
+function getDensityColor(density){
+  console.log(density);
+  return density > 400 ? '#ff0000':
+          density > 300 ? '#ff6060':
+          density > 200 ? '#ff8888':
+          density > 100 ? '#ffa7a7':
+          density > 50 ? '#ffc1c1':
+          density > 25 ? '#ffd8d8': 
+          '#ffecec';
+}
+function style(feature) {
+  return {
+      fillColor: getDensityColor(feature.properties.NUMPOINTS),
+      weight: 1,
+      opacity: 1,
+      color: 'black',
+      dashArray: '3',
+      fillOpacity: 0.7
+  };
+}
+const densityLayer = L.geoJson(density, {style: style});
+const slider = document.getElementById("density");
+slider.addEventListener("click", function(){
+  if(slider.checked){
+    densityLayer.addTo(map);
+  }else{
+    densityLayer.removeFrom(map);
+  }
+})
+
+
 // Additional control place holders
 function addControlPlaceholders(map) {
   let corners = map._controlCorners,
@@ -121,11 +153,13 @@ legend.onAdd = function(){
   let legendDiv = L.DomUtil.create('div', 'legend');
   legendDiv.setAttribute("id", "legend");
   legendDiv.innerHTML += "<h3 class='legend--header'>Legenda</h3>";
+  // Clusters
   legendDiv.innerHTML += "<h5 class='legend--header-2'>Cluster indicatie</h5>";
-  legendDiv.innerHTML += "<section class='legend--section'><div class='windmill__icon windmill__icon--red legend--icon'></div><p class='legend--text'>Vanaf " + med_highCount + " molens</p>";
-  legendDiv.innerHTML += "<section class='legend--section'><div class='windmill__icon windmill__icon--orange legend--icon'></div><p class='legend--text'>"+ low_medCount + " tot " + med_highCount + " molens</p>";
-  legendDiv.innerHTML += "<section class='legend--section'><div class='windmill__icon windmill__icon--yellow legend--icon'></div><p class='legend--text'>"+ lowCount + " tot " + low_medCount + " molens</p>";
   legendDiv.innerHTML += "<section class='legend--section'><div class='windmill__icon windmill__icon--green legend--icon'></div><p class='legend--text'>Tot " + lowCount + " Molens</p>";
+  legendDiv.innerHTML += "<section class='legend--section'><div class='windmill__icon windmill__icon--yellow legend--icon'></div><p class='legend--text'>"+ lowCount + " tot " + low_medCount + " molens</p>";
+  legendDiv.innerHTML += "<section class='legend--section'><div class='windmill__icon windmill__icon--orange legend--icon'></div><p class='legend--text'>"+ low_medCount + " tot " + med_highCount + " molens</p>";
+  legendDiv.innerHTML += "<section class='legend--section'><div class='windmill__icon windmill__icon--red legend--icon'></div><p class='legend--text'>Vanaf " + med_highCount + " molens</p>";
+  // Hoofdfuncties
   legendDiv.innerHTML += "<h5 class='legend--header-2'>Hoofdfunctie molens</h5>";
   legendDiv.innerHTML += "<section class='legend--section'><div class='legend__windmill_icon--purple legend--icon'></div><p class='legend--text'>Industriemolen</p>";
   legendDiv.innerHTML += "<section class='legend--section'><div class='legend__windmill_icon--pink legend--icon'></div><p class='legend--text'>Koren/industriemolen</p>";
@@ -134,6 +168,16 @@ legend.onAdd = function(){
   legendDiv.innerHTML += "<section class='legend--section'><div class='legend__windmill_icon--blue legend--icon'></div><p class='legend--text'>Poldermolen</p>";
   legendDiv.innerHTML += "<section class='legend--section'><div class='legend__windmill_icon--green legend--icon'></div><p class='legend--text'>Zaagmolen</p>";
   legendDiv.innerHTML += "<section class='legend--section'><div class='legend__windmill_icon--brown legend--icon'></div><p class='legend--text'>Onbekende molen</p>";
+  // Density
+  legendDiv.innerHTML += "<h5 class='legend--header-2'>Dichtheid per provincie</h5>";
+  legendDiv.innerHTML += "<section class='legend--section'><div class='legend--color-density' style='background: " + getDensityColor(0) + "'></div> <p class='legend--text'>0 tot 25 molens</p>";
+  legendDiv.innerHTML += "<section class='legend--section'><div class='legend--color-density' style='background: " + getDensityColor(26) + "'></div> <p class='legend--text'>25 tot 50 molens</p>";
+  legendDiv.innerHTML += "<section class='legend--section'><div class='legend--color-density' style='background: " + getDensityColor(51) + "'></div> <p class='legend--text'>50 tot 100 molens</p>";
+  legendDiv.innerHTML += "<section class='legend--section'><div class='legend--color-density' style='background: " + getDensityColor(101) + "'></div> <p class='legend--text'>100 tot 200 molens</p>";
+  legendDiv.innerHTML += "<section class='legend--section'><div class='legend--color-density' style='background: " + getDensityColor(201) + "'></div> <p class='legend--text'>200 tot 300 molens</p>";
+  legendDiv.innerHTML += "<section class='legend--section'><div class='legend--color-density' style='background: " + getDensityColor(301) + "'></div> <p class='legend--text'>300 tot 400 molens</p>";
+  legendDiv.innerHTML += "<section class='legend--section'><div class='legend--color-density' style='background: " + getDensityColor(401) + "'></div> <p class='legend--text'>Meer dan 400 molens</p>";
+
 
   return legendDiv
 }
