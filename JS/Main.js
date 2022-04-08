@@ -164,9 +164,10 @@ function zoomToFeature(e) {
 function onEachFeatureDensity(feature, layer) {
   layer.on({
       mouseover: highlightFeature,
-      click: highlightFeature,
+      touchstart: highlightFeature,
+      touchend: resetHighlight,
       mouseout: resetHighlight,
-      // click: zoomToFeature
+      click: zoomToFeature
   });
 }
 const densityLayer = L.geoJson(density, {
