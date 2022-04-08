@@ -34,7 +34,8 @@ body{
     transition: margin-left .5s;
 }
 .header{
-    display: grid;
+    /* display: grid; */
+    display: flex;
     align-items: baseline;
     grid-template-columns: repeat(5, 1fr);
     padding: 0.8rem;  
@@ -43,10 +44,8 @@ body{
     text-align: center;
     font-size: 2rem;
     flex-grow: 5;
-    display: block;
-    grid-column-start: 3;
+    /* grid-column: 3/6; */
 }
-
 /* Additional control placeholders  */
 .leaflet-verticalcenter {
     position: absolute;
@@ -149,7 +148,7 @@ body{
 .sideNav--open{
     font-size: 2rem;
     cursor: pointer;
-    grid-column-start: 1;
+    /* grid-column: 0 /2; */
 }
 .sideNav {
     height: 100%;
@@ -166,6 +165,7 @@ body{
 .sideNav__open{
     width: 30rem;
     border-right: 1px solid var(--nav-color--rgba);
+    flex-grow: 2;
 }
 .sideNav__header{
     display: flex;
