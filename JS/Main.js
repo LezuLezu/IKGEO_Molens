@@ -1,5 +1,4 @@
-console.log("JS loaded");
-
+// console.log("JS loaded");
 // Const vars
 // Counts for clusters
 const lowCount = 20;
@@ -59,16 +58,16 @@ const windmillIcon_Red = new L.Icon({
 });
 
 // map
-let map = L.map('map',{zoomControl: false}).setView([52.0907374, 5.1214201], 7);
+const map = L.map('map',{zoomControl: false}).setView([52.0907374, 5.1214201], 7);
 
-let mapLayer_streets = L.tileLayer('https://api.maptiler.com/maps/streets/{z}/{x}/{y}@2x.png?key=FyhWpGrC4R5xjalBeWSx', {
+const mapLayer_streets = L.tileLayer('https://api.maptiler.com/maps/streets/{z}/{x}/{y}@2x.png?key=FyhWpGrC4R5xjalBeWSx', {
   attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
 }).addTo(map);
 
-scale = L.control.scale({position:'topright'}).addTo(map);
+const scale = L.control.scale({position:'topright'}).addTo(map);
 L.control.zoom({position:'topright'}).addTo(map);
 
-let north = L.control({position: "bottomright"});
+const north = L.control({position: "bottomright"});
 north.onAdd = function() {
   let div = L.DomUtil.create("div", "windroos");
   div.innerHTML = '<img src="IMG/windroos/windroos_75x75.png" width="75" height="75" alt="north arrow">';
@@ -165,6 +164,7 @@ function zoomToFeature(e) {
 function onEachFeatureDensity(feature, layer) {
   layer.on({
       mouseover: highlightFeature,
+      onmousedown: highlightFeature,
       mouseout: resetHighlight,
       click: zoomToFeature
   });

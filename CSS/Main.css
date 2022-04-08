@@ -34,7 +34,6 @@ body{
     transition: margin-left .5s;
 }
 .header{
-    /* display: grid; */
     display: flex;
     align-items: baseline;
     grid-template-columns: repeat(5, 1fr);
@@ -43,8 +42,7 @@ body{
 .title__head{
     text-align: center;
     font-size: 2rem;
-    flex-grow: 5;
-    /* grid-column: 3/6; */
+    flex-grow: 4;
 }
 /* Additional control placeholders  */
 .leaflet-verticalcenter {
@@ -55,11 +53,9 @@ body{
     transform: translateY(-50%); /* using the CSS3 Transform technique */
     padding-top: 10px;
 }
-
 .leaflet-verticalcenter .leaflet-control {
     margin-bottom: 10px;
 }
-
 /* Legenda */
 .legend--button{
     background-color: var(--background-color);
@@ -86,7 +82,6 @@ body{
     transition: 0.5s;
     right: 0;
 }
-
 .legend--header{
     text-align: center;
     font-size: 1.8rem;
@@ -111,7 +106,6 @@ body{
     padding: 0.5rem;
     grid-column: 2/4;
 }
-
 /* Density display */
 .density--info{
     background-color: var(--background-color);
