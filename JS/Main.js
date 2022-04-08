@@ -164,7 +164,7 @@ function zoomToFeature(e) {
 function onEachFeatureDensity(feature, layer) {
   layer.on({
       mouseover: highlightFeature,
-      touchend: highlightFeature,
+      onclick: highlightFeature,
       mouseout: resetHighlight,
       click: zoomToFeature
   });
