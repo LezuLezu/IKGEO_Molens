@@ -61,7 +61,7 @@ const windmillIcon_Red = new L.Icon({
 const map = L.map('map',{zoomControl: false}).setView([52.0907374, 5.1214201], 7);
 
 const mapLayer_streets = L.tileLayer('https://api.maptiler.com/maps/streets/{z}/{x}/{y}@2x.png?key=FyhWpGrC4R5xjalBeWSx', {
-  attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
+  attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap</a>',
 }).addTo(map);
 
 const scale = L.control.scale({position:'topright'}).addTo(map);

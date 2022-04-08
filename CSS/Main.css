@@ -54,8 +54,9 @@ body{
     padding-top: 10px;
 }
 .leaflet-verticalcenter .leaflet-control {
-    margin-bottom: 10px;
+    margin-bottom: 1rem;
 }
+
 /* Legenda */
 .legend--button{
     background-color: var(--background-color);
@@ -109,8 +110,8 @@ body{
 /* Density display */
 .density--info{
     background-color: var(--background-color);
-    opacity: 0.8;
-    width: 20rem;
+    opacity: 0.9;
+    width: 15rem;
     padding: 0.3rem ;
 }
 /* style scrollbar in legend  */
@@ -128,7 +129,6 @@ body{
 #legend::-webkit-scrollbar-thumb:hover{
     background-color: var(--nav-color-hover);
 }
-
 .legend--color-density{
     grid-column: 1;
     place-self: center;
@@ -142,7 +142,6 @@ body{
 .sideNav--open{
     font-size: 2rem;
     cursor: pointer;
-    /* grid-column: 0 /2; */
 }
 .sideNav {
     height: 100%;
@@ -167,7 +166,6 @@ body{
     width: 100%;
     padding-left: 0.8rem;
     padding-right: 0.8rem;
-    /* padding-bottom: 0.8rem; */
 }
 .sideNav--close {
     top: 0;
@@ -280,7 +278,6 @@ body{
 .title--small{
     font-size: 0.9rem;
 }
-
 .border-top{
     border-top: 1px solid var(--nav-color);
 }
@@ -354,8 +351,7 @@ body{
     -ms-background-repeat: no-repeat;
     -ms-background-position: center;
     width: 32px;
-    height: 32px;
-    
+    height: 32px;    
 }
 .windmill__icon--text{
     display: none;
@@ -369,7 +365,6 @@ body{
     display: block;
     cursor: pointer;
 }
-
 .windmill__icon--red{
     background-color: rgb(255, 0, 0, 0.5);
     border-radius: 50%;
@@ -482,8 +477,7 @@ body{
     -ms-background-position: center;
     width: 25px;
     height: 25px;
-}
-    
+}    
 .legend__windmill_icon--pink{
     /* base background image */
     background-image: url('https://i.imgur.com/d4KRoYk.png?1');
