@@ -134,7 +134,7 @@ densityInfo.onAdd = function (map) {
   return this._div;
 };
 densityInfo.update = function (props) {  
-  console.log(props);
+  // console.log(props);
   this._div.innerHTML = '<h4 class="density--info-header">Molen dichtheid</h4><p class="denstity--info-text">' +  (props ?
     '<b>' + props.Provincien + '</b><br />' + props.NUMPOINTS + ' Molens in deze provincie'
     : 'Hover over of klik op een provincie met de dichtheidsfilter aan om hier het aantal molens te zien');	
@@ -161,13 +161,18 @@ function resetHighlight(e) {
 function zoomToFeature(e) {
   map.fitBounds(e.target.getBounds());
 }
+function handleClick(e){
+  highlightFeature(e);
+  setTimeout(function(){
+    resetHighlight(e);
+  }, 3200);
+}
 function onEachFeatureDensity(feature, layer) {
   layer.on({
       mouseover: highlightFeature,
-      touchstart: highlightFeature,
-      touchend: resetHighlight,
+      click: handleClick,  
       mouseout: resetHighlight,
-      click: zoomToFeature
+      // click: zoomToFeature
   });
 }
 const densityLayer = L.geoJson(density, {
