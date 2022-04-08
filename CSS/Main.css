@@ -34,14 +34,17 @@ body{
     transition: margin-left .5s;
 }
 .header{
-    display: flex;
+    display: grid;
     align-items: baseline;
+    grid-template-columns: repeat(5, 1fr);
     padding: 0.8rem;  
 }
 .title__head{
     text-align: center;
     font-size: 2rem;
     flex-grow: 5;
+    display: block;
+    grid-column-start: 3;
 }
 
 /* Additional control placeholders  */
@@ -109,6 +112,14 @@ body{
     padding: 0.5rem;
     grid-column: 2/4;
 }
+
+/* Density display */
+.density--info{
+    background-color: var(--background-color);
+    opacity: 0.8;
+    width: 20rem;
+    padding: 0.3rem ;
+}
 /* style scrollbar in legend  */
 #legend::-webkit-scrollbar {
     width: 0.5rem;
@@ -138,6 +149,7 @@ body{
 .sideNav--open{
     font-size: 2rem;
     cursor: pointer;
+    grid-column-start: 1;
 }
 .sideNav {
     height: 100%;
