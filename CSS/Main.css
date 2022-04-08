@@ -137,7 +137,6 @@ body{
     opacity: 0.7;
     border: 0.2rem solid var(--nav-color);
 }
-
 /* Navigation    */
 .sideNav--open{
     font-size: 2rem;
