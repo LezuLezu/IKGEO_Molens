@@ -1,5 +1,4 @@
-console.log("JS loaded");
-
+// console.log("JS loaded");
 // Const vars
 // Counts for clusters
 const lowCount = 20;
@@ -59,16 +58,16 @@ const windmillIcon_Red = new L.Icon({
 });
 
 // map
-let map = L.map('map',{zoomControl: false}).setView([52.0907374, 5.1214201], 8.5);
+const map = L.map('map',{zoomControl: false}).setView([52.0907374, 5.1214201], 7);
 
-let mapLayer_streets = L.tileLayer('https://api.maptiler.com/maps/streets/{z}/{x}/{y}@2x.png?key=FyhWpGrC4R5xjalBeWSx', {
-  attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
+const mapLayer_streets = L.tileLayer('https://api.maptiler.com/maps/streets/{z}/{x}/{y}@2x.png?key=FyhWpGrC4R5xjalBeWSx', {
+  attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap</a>',
 }).addTo(map);
 
-scale = L.control.scale({position:'topright'}).addTo(map);
+const scale = L.control.scale({position:'topright'}).addTo(map);
 L.control.zoom({position:'topright'}).addTo(map);
 
-let north = L.control({position: "bottomright"});
+const north = L.control({position: "bottomright"});
 north.onAdd = function() {
   let div = L.DomUtil.create("div", "windroos");
   div.innerHTML = '<img src="IMG/windroos/windroos_75x75.png" width="75" height="75" alt="north arrow">';
@@ -76,9 +75,39 @@ north.onAdd = function() {
 };
 north.addTo(map);
 
+// darken out other countries
+function getCountryColor(country){
+  return country != "Netherlands" ? '#1E1B18':
+                  "#ffffff";
+}
+function getCountryOpacity(country){
+  return country != "Netherlands" ? 0.8:
+                  0;
+}
+function getBorderColor(country){
+  return country != "Netherlands" ? '#D8315B':
+                  "#ffffff";                  
+}
+function getBorderOpacity(country){
+  return country != "Netherlands" ? 0.8:
+                  0;
+}
+function borderStyle(feature){
+  return {
+    fillColor: getCountryColor(feature.properties.NAME),
+    fillOpacity:getCountryOpacity(feature.properties.NAME),
+    weight: 1,
+    opacity: getBorderOpacity(feature.properties.NAME),
+    color: getBorderColor(feature.properties.NAME),
+    dashArray: '3',    
+  };
+}
+const borderLayer = L.geoJson(borders, {style: borderStyle});
+borderLayer.addTo(map);
+
 // Windmill density
 function getDensityColor(density){
-  console.log(density);
+  // console.log(density);
   return density > 400 ? '#ff0000':
           density > 300 ? '#ff6060':
           density > 200 ? '#ff8888':
@@ -87,7 +116,7 @@ function getDensityColor(density){
           density > 25 ? '#ffd8d8': 
           '#ffecec';
 }
-function style(feature) {
+function styleDensity(feature) {
   return {
       fillColor: getDensityColor(feature.properties.NUMPOINTS),
       weight: 1,
@@ -97,29 +126,91 @@ function style(feature) {
       fillOpacity: 0.7
   };
 }
-const densityLayer = L.geoJson(density, {style: style});
+// Density layer interactions
+var densityInfo = L.control({position: "bottomleft"});
+densityInfo.onAdd = function (map) {
+  this._div = L.DomUtil.create('div', 'density--info'); // create a div with a class "info"
+  this.update();
+  return this._div;
+};
+densityInfo.update = function (props) {  
+  // console.log(props);
+  this._div.innerHTML = '<h4 class="density--info-header">Molen dichtheid</h4><p class="denstity--info-text">' +  (props ?
+    '<b>' + props.Provincien + '</b><br />' + props.NUMPOINTS + ' Molens in deze provincie'
+    : 'Hover over of klik op een provincie met de dichtheidsfilter aan om hier het aantal molens te zien');	
+  };
+densityInfo.addTo(map);
+// console.log(densityInfo)
+function highlightFeature(e) {
+  var layer = e.target;
+  layer.setStyle({
+      weight: 5,
+      color: '#1E1B18',
+      dashArray: '',
+      fillOpacity: 0.7
+  });
+  if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+      layer.bringToFront();
+  }
+  densityInfo.update(layer.feature.properties);
+}
+function resetHighlight(e) {
+  densityLayer.resetStyle(e.target);
+  densityInfo.update();
+}
+function zoomToFeature(e) {
+  map.fitBounds(e.target.getBounds());
+}
+function handleClick(e){
+  highlightFeature(e);
+  setTimeout(function(){
+    resetHighlight(e);
+  }, 4000);
+}
+function onEachFeatureDensity(feature, layer) {
+  layer.on({
+      mouseover: highlightFeature,
+      click: handleClick,  
+      mouseout: resetHighlight,
+      // click: zoomToFeature
+  });
+}
+const densityLayer = L.geoJson(density, {
+  style: styleDensity, 
+  onEachFeature: onEachFeatureDensity
+});
 const slider = document.getElementById("density");
 slider.addEventListener("click", function(){
   if(slider.checked){
+    if(map.hasLayer(molenLayer)){
+      map.removeLayer(molenLayer);
+    }
+    if(map.hasLayer(molenClusters)){
+      map.removeLayer(molenClusters);
+    }
+    if(map.hasLayer(filterLayer)){
+      map.removeLayer(filterLayer);
+    }
+    if(map.hasLayer(filterClusters)){
+      map.removeLayer(filterClusters);
+    }
     densityLayer.addTo(map);
-  }else{
-    densityLayer.removeFrom(map);
   }
-})
-
+  else{
+    densityLayer.removeFrom(map);
+    fixZoom();
+  }
+});
 
 // Additional control place holders
 function addControlPlaceholders(map) {
   let corners = map._controlCorners,
       l = 'leaflet-',
       container = map._controlContainer;
-
   function createCorner(vSide, hSide) {
       let className = l + vSide + ' ' + l + hSide;
-
       corners[vSide + hSide] = L.DomUtil.create('div', className, container);
   }
-
   createCorner('verticalcenter', 'left');
   createCorner('verticalcenter', 'right');
 }
@@ -169,7 +260,7 @@ legend.onAdd = function(){
   legendDiv.innerHTML += "<section class='legend--section'><div class='legend__windmill_icon--green legend--icon'></div><p class='legend--text'>Zaagmolen</p>";
   legendDiv.innerHTML += "<section class='legend--section'><div class='legend__windmill_icon--brown legend--icon'></div><p class='legend--text'>Onbekende molen</p>";
   // Density
-  legendDiv.innerHTML += "<h5 class='legend--header-2'>Dichtheid per provincie</h5>";
+  legendDiv.innerHTML += "<h5 class='legend--header-2 ' id='legend--density'>Dichtheid per provincie</h5>";
   legendDiv.innerHTML += "<section class='legend--section'><div class='legend--color-density' style='background: " + getDensityColor(0) + "'></div> <p class='legend--text'>0 tot 25 molens</p>";
   legendDiv.innerHTML += "<section class='legend--section'><div class='legend--color-density' style='background: " + getDensityColor(26) + "'></div> <p class='legend--text'>25 tot 50 molens</p>";
   legendDiv.innerHTML += "<section class='legend--section'><div class='legend--color-density' style='background: " + getDensityColor(51) + "'></div> <p class='legend--text'>50 tot 100 molens</p>";
@@ -210,7 +301,7 @@ let molenLayer = L.geoJSON(molens, {
                     + "<figcaption class='popup__figure--figcap' > Foto van: " + feature.properties.FOTOGRAAF + "</figcation> "
                     + "</figure>"
                     //  Links
-                    + "<p class='pupup__text--links'> <a class='popup__link popup__link--route' target='_blank' href='"+ makeSearchQuery(feature.properties.NAAM) +  "'> Route </a> <br>"
+                    + "<p class='pupup__text--links'> <a class='popup__link popup__link--route' target='_blank' href='"+ makeSearchQuery(feature.properties.NAAM) +  "'> Google maps </a> <br>"
                     + "<a class='popup__link popup__link--info' target='_blank' href=" + feature.properties.INFOLINK +"> Meer informatie </a> </p>");
   },
   pointToLayer: function(feature, latlng){
@@ -296,7 +387,7 @@ function updateOnFilter(){
                     + "<figcaption class='popup__figure--figcap' > Foto van: " + feature.properties.FOTOGRAAF + "</figcation> "
                     + "</figure>"
                     //  Links
-                    + "<p class='pupup__text--links'> <a class='popup__link popup__link--route' target='_blank' href='"+ makeSearchQuery(feature.properties.NAAM) +  "'> Route </a> <br>"
+                    + "<p class='pupup__text--links'> <a class='popup__link popup__link--route' target='_blank' href='"+ makeSearchQuery(feature.properties.NAAM) +  "'> Google maps</a> <br>"
                     + "<a class='popup__link popup__link--info' target='_blank' href=" + feature.properties.INFOLINK +"> Meer informatie </a> </p>");
         }
       },
@@ -343,46 +434,48 @@ map.on('zoom', function(){
 });
 // Use correct zoom layer on zooming in or out or filter update
 function fixZoom(){
-  if(map.getZoom() >= zoomMin_to_molenLayer){
-    if(document.getElementById("windmills--all").checked == true){
-      // remove filter layers
-      map.removeLayer(filterLayer);
-      map.removeLayer(filterClusters);
-      // remove main cluster layer
-      map.removeLayer(molenClusters);
-      // add main layer
-      map.addLayer(molenLayer);
+  if(!slider.checked){
+    if(map.getZoom() >= zoomMin_to_molenLayer){
+      if(document.getElementById("windmills--all").checked == true){
+        // remove filter layers
+        map.removeLayer(filterLayer);
+        map.removeLayer(filterClusters);
+        // remove main cluster layer
+        map.removeLayer(molenClusters);
+        // add main layer
+        map.addLayer(molenLayer);
+      }
+      // if windmills--all not checked add filter layers
+      else if(document.getElementById("windmills--all").checked == false){
+        // remove main layers
+        map.removeLayer(molenLayer);
+        map.removeLayer(molenClusters);
+        // remove filter clusters
+        map.removeLayer(filterClusters);
+        // add filter layer
+        map.addLayer(filterLayer);
+      }
     }
-    // if windmills--all not checked add filter layers
-    else if(document.getElementById("windmills--all").checked == false){
-      // remove main layers
-      map.removeLayer(molenLayer);
-      map.removeLayer(molenClusters);
-      // remove filter clusters
-      map.removeLayer(filterClusters);
-      // add filter layer
-      map.addLayer(filterLayer);
-    }
-  }
-  else if(map.getZoom() <= zoomMax_to_molenClusters){
-    if(document.getElementById("windmills--all").checked == true){
-      // remove filter layers
-      map.removeLayer(filterLayer);
-      map.removeLayer(filterClusters);
-      // remove main layer
-      map.removeLayer(molenLayer);
-      // add main cluster layer
-      map.addLayer(molenClusters);
-    }
-    // if windmills--all not checked add filter cluster layer
-    else if(document.getElementById("windmills--all").checked == false){
-      // remove main layers
-      map.removeLayer(molenLayer);
-      map.removeLayer(molenClusters);
-      // remove filter layer
-      map.removeLayer(filterLayer);
-      // add filter cluster layer
-      map.addLayer(filterClusters);
+    else if(map.getZoom() <= zoomMax_to_molenClusters){
+      if(document.getElementById("windmills--all").checked == true){
+        // remove filter layers
+        map.removeLayer(filterLayer);
+        map.removeLayer(filterClusters);
+        // remove main layer
+        map.removeLayer(molenLayer);
+        // add main cluster layer
+        map.addLayer(molenClusters);
+      }
+      // if windmills--all not checked add filter cluster layer
+      else if(document.getElementById("windmills--all").checked == false){
+        // remove main layers
+        map.removeLayer(molenLayer);
+        map.removeLayer(molenClusters);
+        // remove filter layer
+        map.removeLayer(filterLayer);
+        // add filter cluster layer
+        map.addLayer(filterClusters);
+      }
     }
   }
 }
