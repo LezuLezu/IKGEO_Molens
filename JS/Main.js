@@ -127,7 +127,7 @@ function styleDensity(feature) {
   };
 }
 // Density layer interactions
-var densityInfo = L.control({position: "topleft"});
+var densityInfo = L.control({position: "bottomleft"});
 densityInfo.onAdd = function (map) {
   this._div = L.DomUtil.create('div', 'density--info'); // create a div with a class "info"
   this.update();
@@ -165,7 +165,7 @@ function handleClick(e){
   highlightFeature(e);
   setTimeout(function(){
     resetHighlight(e);
-  }, 3200);
+  }, 4000);
 }
 function onEachFeatureDensity(feature, layer) {
   layer.on({
@@ -301,7 +301,7 @@ let molenLayer = L.geoJSON(molens, {
                     + "<figcaption class='popup__figure--figcap' > Foto van: " + feature.properties.FOTOGRAAF + "</figcation> "
                     + "</figure>"
                     //  Links
-                    + "<p class='pupup__text--links'> <a class='popup__link popup__link--route' target='_blank' href='"+ makeSearchQuery(feature.properties.NAAM) +  "'> Route </a> <br>"
+                    + "<p class='pupup__text--links'> <a class='popup__link popup__link--route' target='_blank' href='"+ makeSearchQuery(feature.properties.NAAM) +  "'> Google maps </a> <br>"
                     + "<a class='popup__link popup__link--info' target='_blank' href=" + feature.properties.INFOLINK +"> Meer informatie </a> </p>");
   },
   pointToLayer: function(feature, latlng){
@@ -387,7 +387,7 @@ function updateOnFilter(){
                     + "<figcaption class='popup__figure--figcap' > Foto van: " + feature.properties.FOTOGRAAF + "</figcation> "
                     + "</figure>"
                     //  Links
-                    + "<p class='pupup__text--links'> <a class='popup__link popup__link--route' target='_blank' href='"+ makeSearchQuery(feature.properties.NAAM) +  "'> Route </a> <br>"
+                    + "<p class='pupup__text--links'> <a class='popup__link popup__link--route' target='_blank' href='"+ makeSearchQuery(feature.properties.NAAM) +  "'> Google maps</a> <br>"
                     + "<a class='popup__link popup__link--info' target='_blank' href=" + feature.properties.INFOLINK +"> Meer informatie </a> </p>");
         }
       },
